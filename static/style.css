@@ -1,0 +1,22 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.pokecard {
+    border:2px solid black;
+    margin: 10px 0px 0px 10px;
+    width: 145px;
+    height: 200px;
+    background-color: gainsboro;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.poketitle {
+    border-bottom: .5px solid black;
+    width: 98%;
+    padding: 2px 0px 0px 5px;
+}
