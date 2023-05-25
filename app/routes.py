@@ -42,7 +42,7 @@ def get_poke():
                 'ability' : poke_data['abilities'][0]['ability']['name'],
                 'sprite' : poke_data['sprites']['front_default']
             }
-            return render_template('card.html', pokemon_data = pokemon_data)
+            return render_template('card.html',pokemon_data = pokemon_data, pokeform = pokeform)
         else:
             print('Invalid name')
-    return render_template('forms.html')
+    return render_template('forms.html', pokeform = pokeform)
