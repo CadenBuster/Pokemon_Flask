@@ -6,6 +6,7 @@
     {% block content %}
     <form action="" method="POST">
         {{ pokeform.hidden_tag() }}
+        {{ pokeform.pokemon.label }}
         {{ pokeform.pokemon }}
         {{ pokeform.submit_btn }}
     </form>
