@@ -4,10 +4,10 @@
     {% endblock %}
 
     {% block content %}
-    <form method="POST">
-        <label for="pokemon">Enter a Pokemon: </label>
-        <input type="text" id ="pokemon" name="pokemon">
-        <input type="submit" value = "Get Info">
+    <form action="" method="POST">
+        {{ pokeform.hidden_tag() }}
+        {{ pokeform.pokemon }}
+        {{ pokeform.submit_btn }}
     </form>
     {% if pokemon_data %}
         {% block card%}

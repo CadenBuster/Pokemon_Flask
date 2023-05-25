@@ -1,24 +1,37 @@
 from flask import request, render_template
 import requests
 from app import app
-from forms import LoginForm
+from .forms import LoginForm, PokemonForm
 
 @app.route('/')
 def home():
     return render_template('home.html')
 
+USERS = {
+    'emailemail@email.com': {
+        'name': 'Test',
+        'password': '1234'
+    }
+}
+
 @app.route('/login', methods=['GET','POST'])
 def login():
     form = LoginForm()
-    if request.method == 'POST':
-        return '<p>Logged In</p>'
+    if request.method == 'POST' and form.validate_on_submit():
+        email = form.email.data.lower()
+        password = form.password.data
+        if email in USERS and password == USERS[email]['password']:
+            return f"Hello, {USERS[email]['name']}"
+        else:
+            return 'Invalid email or password'
     else:
         return render_template('login.html',form = form)
 
 @app.route('/getpokemon', methods =['GET','POST'])
 def get_poke():
-    if request.method == 'POST':
-        pokemon = request.form.get('pokemon')
+    pokeform = PokemonForm()
+    if request.method == 'POST' and pokeform.validate_on_submit():
+        pokemon = pokeform.pokemon.data.lower()
         url = f'https://pokeapi.co/api/v2/pokemon/{pokemon}'
         response = requests.get(url)
         if response.ok:
