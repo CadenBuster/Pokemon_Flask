@@ -1,13 +1,15 @@
-from flask import request, render_template
+from flask import request, render_template, redirect, url_for, flash
 import requests
-from app import app
+from app import app,db
 from .forms import LoginForm, PokemonForm, SignupForm
+from app.models import User
+from werkzeug.security import check_password_hash
+from flask_login import login_user, logout_user, current_user, login_required
+
 
 @app.route('/')
 def home():
     return render_template('home.html')
-
-USERS = {}
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -15,10 +17,13 @@ def login():
     if request.method == 'POST' and form.validate_on_submit():
         email = form.email.data.lower()
         password = form.password.data
-        if email in USERS and password == USERS[email]['password']:
-            return f"Hello, {USERS[email]['name']}"
+        queried_user = User.query.filter(User.email == email).first()
+        if queried_user and check_password_hash(queried_user.password, password):
+            login_user(queried_user)
+            return redirect(url_for('home'))
         else:
-            return 'Invalid email or password'
+            flash('Invalid email or password', 'error')
+            return render_template('login.html',form = form)
     else:
         return render_template('login.html',form = form)
     
@@ -26,18 +31,36 @@ def login():
 def signup():
     form = SignupForm()
     if request.method == 'POST' and form.validate_on_submit():
-        name = form.first_name.data + ' ' + form.last_name.data
-        email = form.email.data.lower()
-        password = form.password.data
-        USERS[email] = {
-            'name' : name,
-            'password' : password
+
+        user_data = {
+            'first_name' : form.first_name.data,
+            'last_name' : form.last_name.data,
+            'email' : form.email.data.lower(),
+            'password' : form.password.data
         }
-        return 'Thank you for signing up!'
+
+        new_user = User()
+
+        new_user.from_dict(user_data)
+
+        db.session.add(new_user)
+        db.session.commit()
+
+
+        flash('Thank you for signing up!', 'success')
+        return redirect(url_for('login'))
     else:
         return render_template('signup.html', form = form)
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Logged out!')
+    return redirect(url_for('home'))
+
 @app.route('/getpokemon', methods =['GET','POST'])
+@login_required
 def get_poke():
     pokeform = PokemonForm()
     if request.method == 'POST' and pokeform.validate_on_submit():

@@ -10,19 +10,36 @@
 </head>
 <body>
     <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link" href="/">HomePage</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/signup">Signup</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/getpokemon">Pokemon</a>
-        </li>
+
+        {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('home')}}">HomePage</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('get_poke')}}">Pokemon</a>
+          </li>
+          <li class="nav-item">
+            <p class="nav-link">{{current_user.first_name}}</p>
+          </li>
+          <a class="btn btn-secondary" href="{{url_for('logout')}}">Logout</a>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('login')}}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('signup')}}">Signup</a>
+          </li>
+        {% endif %}
       </ul>
+    {% with messages = get_flashed_messages(with_categories = true)%}
+      {% if messages %}
+        <ul class = flashes> 
+        {% for category, message in messages %}
+          <li class="{{category}}">{{message}}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     {% block content %}
 
     {% endblock %}
