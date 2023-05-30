@@ -4,11 +4,11 @@
     {% endblock %}
 
     {% block content %}
-    <form action="" method="POST">
+    <form action="" method="POST" class="my_forms">
         {{ pokeform.hidden_tag() }}
         {{ pokeform.pokemon.label }}
         {{ pokeform.pokemon }}
-        {{ pokeform.submit_btn }}
+        {{ pokeform.submit_btn(class="btn btn-outline-dark") }}
     </form>
     {% if pokemon_data %}
         {% block card%}

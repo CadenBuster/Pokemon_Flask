@@ -17,6 +17,29 @@
 
 .poketitle {
     border-bottom: .5px solid black;
-    width: 98%;
+    width: 100%;
     padding: 2px 0px 0px 5px;
+}
+
+.custom_body {
+    margin-top: 5px;
+}
+
+.my_forms {
+    display: flex;
+    margin: 10px;
+    padding: 5px;
+    background-color: ghostwhite;
+    border: 1px solid black;
+    flex-direction: column;
+    width: 15%;
+    align-items: center;
+    justify-content: space-around;
+    min-height: 200px;
+    min-width: 200px;
+}
+
+#flash {
+    margin-left: 5px;
+    color:gainsboro;
 }

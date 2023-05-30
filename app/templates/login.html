@@ -5,12 +5,18 @@
 {% endblock %}
 
 {% block content %}
-    <form action="" method="POST">
+    <form action="" method="POST" class="my_forms">
         {{ form.hidden_tag() }}
-        {{ form.email.label }}
-        {{ form.email }}
-        {{ form.password.label }}
-        {{ form.password }}
-        {{ form.submit_btn }}
+        <div>
+            {{ form.email.label }}
+            <br>
+            {{ form.email }}
+        </div>
+        <div>
+            {{ form.password.label }}
+            <br>
+            {{ form.password }}
+        </div>
+        {{ form.submit_btn(class="btn btn-outline-dark")}}
     </form>
 {% endblock %}
