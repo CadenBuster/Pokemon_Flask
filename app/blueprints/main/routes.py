@@ -3,7 +3,7 @@ import requests
 from . import main
 from app.blueprints.main.forms import PokemonForm
 from flask_login import current_user, login_required
-
+from app.models import Pokemon
 
 @main.route('/')
 def home():

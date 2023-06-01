@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String, nullable = False)
     password = db.Column(db.String)
     created_on = db.Column(db.DateTime, default = datetime.utcnow())
+    poke = db.relationship('Pokemon', backref='author', lazy='dynamic')
 
     def hash_password(self, signup_password):
         return generate_password_hash(signup_password)
@@ -19,6 +20,23 @@ class User(UserMixin, db.Model):
         self.last_name = user_data ['last_name']
         self.email = user_data['email']
         self.password = self.hash_password(user_data['password'])
+
+
+class Pokemon(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    img_url = db.Column(db.String)
+    ability = db.Column(db.String)
+    base_xp = db.Column(db.String)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
+
+    def from_dict(self,poke_data):
+        self.name = poke_data['name']
+        self.img_url = poke_data['sprite']
+        self.ability = poke_data['ability']
+        self.base_xp = poke_data['base_xp']
+        self.user_id = poke_data['user_id']
 
 @login_manager.user_loader
 def load_uer(user_id):
