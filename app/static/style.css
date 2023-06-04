@@ -21,16 +21,13 @@
     padding: 2px 0px 0px 5px;
 }
 
-.custom_body {
-    margin-top: 5px;
-}
-
 .my_forms {
     display: flex;
     margin: 10px;
     padding: 5px;
-    background-color: ghostwhite;
+    background-color: rgb(98, 167, 217);
     border: 1px solid black;
+    border-radius: 10%;
     flex-direction: column;
     width: 15%;
     align-items: center;
@@ -44,6 +41,49 @@
     color:gainsboro;
 }
 
+.background_image {
+    height: 95vh;
+    background-image: url('images/pidgeot.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#Welcome {
+    border-radius: 30%;
+    text-align: center;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #1d77ac;
+    height: 50%;
+    width: 30%;
+    background-color: #d5bd8ac8;
+}
+
+
+.nav_bar_color {
+    background-color: #d5bd8a;
+}
+
+.nav_bar_text {
+    color:#1d77ac;
+}
+
+#pokepage {
+    height: 95vh;
+    background-image: url('images/pokemonfind.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: local;
+}
+
 #pokebutton {
-    margin: 10px;
+    background-color: rgb(133, 52, 11);
+    border:none;
+    cursor: pointer;
 }

@@ -4,18 +4,24 @@
     {% endblock %}
 
     {% block content %}
-    <form action="" method="POST" class="my_forms">
-        {{ pokeform.hidden_tag() }}
-        {{ pokeform.pokemon.label }}
-        {{ pokeform.pokemon }}
-        {{ pokeform.submit_btn(class="btn btn-outline-dark") }}
-    </form>
-    {% if pokemon_data %}
-        {% block card%}
+    <div id="pokepage">
+        <div>
+            <form action="" method="POST" class="my_forms">
+                {{ pokeform.hidden_tag() }}
+                {{ pokeform.pokemon.label }}
+                {{ pokeform.pokemon }}
+                {{ pokeform.submit_btn(class="btn btn-outline-dark") }}
+            </form>
+        </div>
+        {% if pokemon_data %}
+        <div>
+                {% block card%}
 
-        {% endblock %}
-    <form action="" method="GET" id="pokebutton">
-        {{ pokeform.catch_btn}}
-    </form>
-    {% endif %}
+                {% endblock %}
+            <form action="" method="GET">
+                {{ pokeform.catch_btn(id="pokebutton")}}
+            </form>
+        </div>
+        {% endif %}
+    </div>
     {% endblock %}

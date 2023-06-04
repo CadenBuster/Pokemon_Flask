@@ -1,6 +1,7 @@
-from flask import request, render_template
+from flask import request, render_template, redirect, url_for, flash
 import requests
 from . import main
+from app import db
 from app.blueprints.main.forms import PokemonForm
 from flask_login import current_user, login_required
 from app.models import Pokemon
@@ -29,3 +30,17 @@ def get_poke():
         else:
             print('Invalid name')
     return render_template('forms.html', pokeform = pokeform)
+
+
+@main.route('/catch/<int:poke_id>')
+@login_required
+def catch(poke_id):
+    poke = Pokemon.query.get(poke_id)
+    if poke:
+        current_user.followed.append(poke)
+        db.session.commit()
+        flash(f'Successfully caught {poke.name}')
+        return redirect(url_for('main.team'))
+    else:
+        flash('That Pokemon does not exist!')
+        return redirect(url_for('main.team'))

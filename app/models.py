@@ -3,6 +3,13 @@ from flask_login import UserMixin
 from datetime import datetime
 from werkzeug.security import generate_password_hash
 
+pokemon_caught = db.Table(
+    'pokemon_caught',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('poke_id', db.Integer, db.ForeignKey('pokemon.id'))
+)
+
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String, nullable=False)
@@ -11,7 +18,14 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String)
     created_on = db.Column(db.DateTime, default = datetime.utcnow())
     poke = db.relationship('Pokemon', backref='author', lazy='dynamic')
-
+    caught = db.relationship('User',
+        secondary = pokemon_caught,
+        primaryjoin = (pokemon_caught.columns.user_id == id),
+        secondaryjoin = (pokemon_caught.columns.poke_id == id),
+        backref = db.backref('pokemon_caught', lazy='dynamic'),
+        lazy='dynamic'                      
+    )
+    
     def hash_password(self, signup_password):
         return generate_password_hash(signup_password)
     
