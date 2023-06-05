@@ -4,11 +4,11 @@
 }
 
 .pokecard {
-    border:2px solid black;
+    border:2px solid whitesmoke;
     margin: 10px 0px 0px 10px;
     width: 145px;
     height: 200px;
-    background-color: gainsboro;
+    background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -16,9 +16,22 @@
 }
 
 .poketitle {
-    border-bottom: .5px solid black;
+    border-bottom: 3px solid black;
+    background-color: red;
     width: 100%;
     padding: 2px 0px 0px 5px;
+}
+
+.my_button{
+    margin: 10px;
+    background-color: white;
+    border-color: red;
+    color: black;
+}
+
+.my_button:hover {
+    background-color:black;
+    border-color:white;
 }
 
 .my_forms {
@@ -70,15 +83,44 @@
 }
 
 #pokepage {
-    height: 95vh;
+    height: 100vh;
     background-image: url('images/pokemonfind.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: local;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 #pokebutton {
-    background-color: rgb(133, 52, 11);
-    border:none;
+    background-color: red;
+    color:white;
+    text-decoration: none;
+    border:1px solid black;
     cursor: pointer;
+    border-radius: 20%;
+}
+
+.pokemonteam {
+    height: 100vh;
+    background-image: url('images/Pokeball-Wallpaper-Full-HD.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: local;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.signin_pages{
+    height:100vh;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url('images/Pokemon-Wallpapers-HD.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: local;
 }

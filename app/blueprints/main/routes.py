@@ -4,7 +4,7 @@ from . import main
 from app import db
 from app.blueprints.main.forms import PokemonForm
 from flask_login import current_user, login_required
-from app.models import Pokemon
+from app.models import Pokemon, User
 
 @main.route('/')
 def home():
@@ -44,10 +44,18 @@ def get_poke():
 def catch(poke_name):
     poke = Pokemon.query.filter_by(name=poke_name).first()
     if poke:
-        current_user.caught.append(poke)
-        db.session.commit()
-        flash(f'Successfully caught {poke.name}')
-        return redirect(url_for('main.team'))
+        if poke not in current_user.caught:
+            if len(current_user.caught.all()) < 5:
+                current_user.caught.append(poke)
+                db.session.commit()
+                flash(f'Successfully caught {poke.name}')
+                return redirect(url_for('main.team'))
+            else:
+                flash('You can only have five pokemon on your team!')
+                return redirect(url_for('main.team'))
+        else:
+            flash(f'You can only have one {poke.name} on your team')
+            return redirect(url_for('main.team'))
     else:
         flash('That Pokemon does not exist!')
         return redirect(url_for('main.team'))
@@ -71,3 +79,9 @@ def release(poke_id):
 def team():
     team = current_user.caught.all()
     return render_template('poketeam.html', team = team)
+
+@main.route('/trainers')
+@login_required
+def trainer():
+    trainers = User.query.all()
+    return render_template('trainer.html', trainers=trainers)

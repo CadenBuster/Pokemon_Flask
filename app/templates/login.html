@@ -5,18 +5,20 @@
 {% endblock %}
 
 {% block content %}
-    <form action="" method="POST" class="my_forms">
-        {{ form.hidden_tag() }}
-        <div>
-            {{ form.email.label }}
-            <br>
-            {{ form.email }}
-        </div>
-        <div>
-            {{ form.password.label }}
-            <br>
-            {{ form.password }}
-        </div>
-        {{ form.submit_btn(class="btn btn-outline-dark")}}
-    </form>
+    <div class="signin_pages">
+        <form action="" method="POST" class="my_forms">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.email.label }}
+                <br>
+                {{ form.email }}
+            </div>
+            <div>
+                {{ form.password.label }}
+                <br>
+                {{ form.password }}
+            </div>
+            {{ form.submit_btn(class="btn btn-outline-dark")}}
+        </form>
+    </div>
 {% endblock %}

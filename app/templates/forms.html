@@ -16,7 +16,7 @@
         {% if pokemon_data %}
         <div>
             <img src='{{pokemon_data.sprite}}'>
-            <a href="{{ url_for('main.catch', poke_name=pokemon_data.name)}}">Catch</a>
+            <a href="{{ url_for('main.catch', poke_name=pokemon_data.name)}}" id="pokebutton">Catch</a>
         </div>
         {% endif %}
     </div>

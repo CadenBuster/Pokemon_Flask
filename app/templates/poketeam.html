@@ -5,15 +5,19 @@
 {% endblock %}
 
 {% block content %}
+<div class="pokemonteam">
     {% for pokemon in team%}
-    <div class="pokecard">
-        <div class="poketitle">
-            <p>{{pokemon.name}}</p>
-            <p style="font-size:small">XP: {{pokemon.base_xp}}</p>
+    <div>
+        <div class="pokecard">
+            <div class="poketitle">
+                <p>{{pokemon.name}}</p>
+                <p style="font-size:small">XP: {{pokemon.base_xp}}</p>
+            </div>
+            <img src='{{pokemon.img_url}}'>
+            <p>Ability: {{pokemon.ability}}</p>
         </div>
-        <img src='{{pokemon.sprite}}'>
-        <p>Ability: {{pokemon.ability}}</p>
+        <a href="{{ url_for('main.release', poke_id = pokemon.id)}}" class="btn btn-primary my_button">Release</a>
     </div>
-    <a href="{{ url_for('main.release', poke_id = pokemon.id)}}" class="btn btn-primary">Release</a>
     {% endfor %}
+</div>
 {% endblock %}
