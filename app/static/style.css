@@ -124,3 +124,27 @@
     background-size: cover;
     background-attachment: local;
 }
+
+.trainercard {
+    background-color: black;
+    color:white;
+    border: 1px solid white;
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 5px;
+    border-radius: 5%;
+}
+
+.trainers {
+    height:100vh;
+    background-image: url('images/Wallpaper\ Pokemon\ 36.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: local;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: baseline;
+}
