@@ -15,12 +15,8 @@
         </div>
         {% if pokemon_data %}
         <div>
-                {% block card%}
-
-                {% endblock %}
-            <form action="" method="GET">
-                {{ pokeform.catch_btn(id="pokebutton")}}
-            </form>
+            <img src='{{pokemon_data.sprite}}'>
+            <a href="{{ url_for('main.catch', poke_name=pokemon_data.name)}}">Catch</a>
         </div>
         {% endif %}
     </div>

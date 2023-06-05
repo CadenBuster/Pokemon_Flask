@@ -36,13 +36,8 @@
     min-width: 200px;
 }
 
-#flash {
-    margin-left: 5px;
-    color:gainsboro;
-}
-
 .background_image {
-    height: 95vh;
+    height: 100vh;
     background-image: url('images/pidgeot.jpg');
     background-repeat: no-repeat;
     background-size: cover;

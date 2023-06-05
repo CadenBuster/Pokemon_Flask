@@ -17,12 +17,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String, nullable = False)
     password = db.Column(db.String)
     created_on = db.Column(db.DateTime, default = datetime.utcnow())
-    poke = db.relationship('Pokemon', backref='author', lazy='dynamic')
-    caught = db.relationship('User',
+    caught = db.relationship('Pokemon',
         secondary = pokemon_caught,
-        primaryjoin = (pokemon_caught.columns.user_id == id),
-        secondaryjoin = (pokemon_caught.columns.poke_id == id),
-        backref = db.backref('pokemon_caught', lazy='dynamic'),
+        backref= 'pokemon_caught',
         lazy='dynamic'                      
     )
     
@@ -42,7 +39,6 @@ class Pokemon(db.Model):
     img_url = db.Column(db.String)
     ability = db.Column(db.String)
     base_xp = db.Column(db.String)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     
 
     def from_dict(self,poke_data):
@@ -50,7 +46,9 @@ class Pokemon(db.Model):
         self.img_url = poke_data['sprite']
         self.ability = poke_data['ability']
         self.base_xp = poke_data['base_xp']
-        self.user_id = poke_data['user_id']
+    
+    def check(pokename):
+        return Pokemon.query.filter_by(name=pokename).first()
 
 @login_manager.user_loader
 def load_uer(user_id):

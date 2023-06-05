@@ -26,21 +26,48 @@ def get_poke():
                 'ability' : poke_data['abilities'][0]['ability']['name'],
                 'sprite' : poke_data['sprites']['front_default']
             }
-            return render_template('card.html',pokemon_data = pokemon_data, pokeform = pokeform)
+            
+            if not Pokemon.check(pokemon_data['name']):
+                pokemon = Pokemon()
+                pokemon.from_dict(pokemon_data)
+                db.session.add(pokemon)
+                db.session.commit()
+
+            return render_template('forms.html',pokemon_data = pokemon_data, pokeform = pokeform)
         else:
             print('Invalid name')
     return render_template('forms.html', pokeform = pokeform)
 
 
-@main.route('/catch/<int:poke_id>')
+@main.route('/catch/<string:poke_name>')
 @login_required
-def catch(poke_id):
-    poke = Pokemon.query.get(poke_id)
+def catch(poke_name):
+    poke = Pokemon.query.filter_by(name=poke_name).first()
     if poke:
-        current_user.followed.append(poke)
+        current_user.caught.append(poke)
         db.session.commit()
         flash(f'Successfully caught {poke.name}')
         return redirect(url_for('main.team'))
     else:
         flash('That Pokemon does not exist!')
         return redirect(url_for('main.team'))
+
+@main.route('/release/<int:poke_id>')
+@login_required
+def release(poke_id):
+    poke = Pokemon.query.get(poke_id)
+    if poke:
+        current_user.caught.remove(poke)
+        db.session.commit()
+        flash(f'{poke.name} has been released.')
+        return redirect(url_for('main.team'))
+    else:
+        flash('You can only release Pokemon that are on your team.')
+        return redirect(url_for(main.team))
+
+
+@main.route('/team')
+@login_required
+def team():
+    team = current_user.caught.all()
+    return render_template('poketeam.html', team = team)
