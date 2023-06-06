@@ -19,7 +19,9 @@
                 {% endfor %}
             </div>
         </div>
-        <button>Battle</button>
+        {% if trainer.id != current_user.id %}
+            <a href="{{url_for('main.battle', defender = trainer.id)}}" class ="btn btn-primary my_button" style="height:40px;">Battle</a>
+        {% endif %}
     </div>
     
     {% endfor %}

@@ -85,3 +85,26 @@ def team():
 def trainer():
     trainers = User.query.all()
     return render_template('trainer.html', trainers=trainers)
+
+@main.route('/battle/<int:defender>')
+@login_required
+def battle(defender):
+    attacker = current_user
+    defender = User.query.get(defender)
+    attacker_stats = 0
+    defender_stats = 0
+    for pokemon in attacker.caught.all():
+        attacker_stats += int(pokemon.base_xp)
+
+    for pokemon2 in defender.caught.all():
+        defender_stats += int(pokemon2.base_xp)
+
+    if attacker_stats > defender_stats:
+        flash(f'{attacker.first_name} wins!')
+        return render_template('trainer.html')
+    elif attacker_stats == defender_stats:
+        flash(f'Tie!')
+        return render_template('trainer.html')
+    else:
+        flash(f'{defender.first_name} defeated you!')
+        return render_template('trainer.html')
