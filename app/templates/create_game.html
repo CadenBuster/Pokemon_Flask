@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Host Game
+{% endblock %}
+
+{% block content %}
+<div class="create-background">
+    <h1>Create a game to play with others!</h1>
+    <form action="" method="POST" class="create-form">
+        {{form.hidden_tag()}}
+        <div class="create-item">
+            <p>Environment</p>
+            {% for item in form.indoor%}
+            <tr>
+                <td>{{item}}</td>
+                <td>{{item.label}}</td>
+            </tr>
+            {% endfor %}
+        </div>
+        <div class="create-item">
+            <p>Points</p>
+            {% for item in form.score%}
+            <tr>
+                <td>{{item}}</td>
+                <td>{{item.label}}</td>
+            </tr>
+            {% endfor %}
+        </div>
+        <div class="create-item">
+            <p>Players</p>
+            {% for item in form.amount%}
+            <tr>
+                <td>{{item}}</td>
+                <td>{{item.label}}</td>
+            </tr>
+            {% endfor %}
+        </div>
+        <div >
+            {{form.submit_btn(class="create-button")}}
+        </div>
+    </form>
+</div>
+{% endblock %}

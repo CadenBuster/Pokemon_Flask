@@ -2,109 +2,79 @@ from flask import request, render_template, redirect, url_for, flash
 import requests
 from . import main
 from app import db
-from app.blueprints.main.forms import PokemonForm
 from flask_login import current_user, login_required
-from app.models import Pokemon, User
+from app.models import User, Game
+from app.blueprints.main.forms import GameForm
 
 @main.route('/')
 def home():
     return render_template('home.html')
 
-@main.route('/getpokemon', methods =['GET','POST'])
+@main.route('/games', methods = ['GET','POST'])
 @login_required
-def get_poke():
-    pokeform = PokemonForm()
-    if request.method == 'POST' and pokeform.validate_on_submit():
-        pokemon = pokeform.pokemon.data.lower()
-        url = f'https://pokeapi.co/api/v2/pokemon/{pokemon}'
-        response = requests.get(url)
-        if response.ok:
-            poke_data = response.json()
-            pokemon_data = {
-                'name' : poke_data['forms'][0]['name'],
-                'base_xp' : poke_data['base_experience'],
-                'ability' : poke_data['abilities'][0]['ability']['name'],
-                'sprite' : poke_data['sprites']['front_default']
-            }
-            
-            if not Pokemon.check(pokemon_data['name']):
-                pokemon = Pokemon()
-                pokemon.from_dict(pokemon_data)
-                db.session.add(pokemon)
-                db.session.commit()
+def game():
+    form = GameForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        game_data = {
+            'indoor': form.indoor.data,
+            'score': form.score.data,
+            'amount': form.amount.data,
+            'user_id': current_user.id
+        }
 
-            return render_template('forms.html',pokemon_data = pokemon_data, pokeform = pokeform)
-        else:
-            print('Invalid name')
-    return render_template('forms.html', pokeform = pokeform)
+        new_game = Game()
 
+        new_game.from_dict(game_data)
 
-@main.route('/catch/<string:poke_name>')
-@login_required
-def catch(poke_name):
-    poke = Pokemon.query.filter_by(name=poke_name).first()
-    if poke:
-        if poke not in current_user.caught:
-            if len(current_user.caught.all()) < 5:
-                current_user.caught.append(poke)
-                db.session.commit()
-                flash(f'Successfully caught {poke.name}')
-                return redirect(url_for('main.team'))
-            else:
-                flash('You can only have five pokemon on your team!')
-                return redirect(url_for('main.team'))
-        else:
-            flash(f'You can only have one {poke.name} on your team')
-            return redirect(url_for('main.team'))
-    else:
-        flash('That Pokemon does not exist!')
-        return redirect(url_for('main.team'))
-
-@main.route('/release/<int:poke_id>')
-@login_required
-def release(poke_id):
-    poke = Pokemon.query.get(poke_id)
-    if poke:
-        current_user.caught.remove(poke)
+        db.session.add(new_game)
         db.session.commit()
-        flash(f'{poke.name} has been released.')
-        return redirect(url_for('main.team'))
+        flash('You have created a game!')
+        return redirect(url_for('main.joingame'))
     else:
-        flash('You can only release Pokemon that are on your team.')
-        return redirect(url_for(main.team))
+        return render_template('create_game.html', form = form)
 
-
-@main.route('/team')
+@main.route('/joingame')
 @login_required
-def team():
-    team = current_user.caught.all()
-    return render_template('poketeam.html', team = team)
+def joingame():
+    games = Game.query.all()
+    return render_template('join_game.html', games = games )
 
-@main.route('/trainers')
+@main.route('/delete/<int:game_id>')
 @login_required
-def trainer():
-    trainers = User.query.all()
-    return render_template('trainer.html', trainers=trainers)
-
-@main.route('/battle/<int:defender>')
+def delete_game(game_id):
+    game = Game.query.get(game_id)
+    if current_user.id == game.user_id:
+        db.session.delete(game)
+        db.session.commit()
+        return redirect(url_for('main.joingame'))
+    
+@main.route('/participate/<int:game_id>/<int:user>')
 @login_required
-def battle(defender):
-    attacker = current_user
-    defender = User.query.get(defender)
-    attacker_stats = 0
-    defender_stats = 0
-    for pokemon in attacker.caught.all():
-        attacker_stats += int(pokemon.base_xp)
-
-    for pokemon2 in defender.caught.all():
-        defender_stats += int(pokemon2.base_xp)
-
-    if attacker_stats > defender_stats:
-        flash(f'{attacker.first_name} wins!')
-        return render_template('trainer.html')
-    elif attacker_stats == defender_stats:
-        flash(f'Tie!')
-        return render_template('trainer.html')
+def participate(game_id,user):
+    user = User.query.filter_by(id = user).first()
+    game = Game.query.get(game_id)
+    check = 0
+    if game:
+        if game.amount == '3 vs 3':
+            check = 6
+        elif game.amount == '5 vs 5':
+            check = 10
+        if len(game.participants.all()) < check:
+            if user not in game.participants:
+                game.participants.append(user)
+                db.session.commit()
+                flash('You have joined this game!')
+                return redirect(url_for('main.joingame'))
+            else:
+                game.participants.remove(user)
+                db.session.commit()
+                flash('You have left this game!')
+                return redirect(url_for('main.joingame'))  
+        else:
+            flash(f'There are already {check} players signed up for this game!')
+            return redirect(url_for('main.joingame'))
     else:
-        flash(f'{defender.first_name} defeated you!')
-        return render_template('trainer.html')
+        flash('There has been an error!')
+        return redirect(url_for('main.joingame'))
+
+    

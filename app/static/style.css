@@ -1,150 +1,123 @@
 * {
     padding: 0px;
     margin: 0px;
+    color:#040f16;
 }
 
-.pokecard {
-    border:2px solid whitesmoke;
-    margin: 10px 0px 0px 10px;
-    width: 145px;
-    height: 200px;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.poketitle {
-    border-bottom: 3px solid black;
-    background-color: red;
-    width: 100%;
-    padding: 2px 0px 0px 5px;
-}
-
-.my_button{
-    margin: 10px;
-    background-color: white;
-    border-color: red;
-    color: black;
-}
-
-.my_button:hover {
-    background-color:black;
-    border-color:white;
-}
-
-.my_forms {
-    display: flex;
-    margin: 10px;
-    padding: 5px;
-    background-color: rgb(98, 167, 217);
-    border: 1px solid black;
-    border-radius: 10%;
-    flex-direction: column;
-    width: 15%;
-    align-items: center;
-    justify-content: space-around;
-    min-height: 200px;
-    min-width: 200px;
-}
-
-.background_image {
+.home-background {
     height: 100vh;
-    background-image: url('images/pidgeot.jpg');
+    background-image: url('images/basketball.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-#Welcome {
-    border-radius: 30%;
-    text-align: center;
-    display:flex;
     flex-direction: column;
+    align-items: center;
+}
+
+.home-hero{
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    color: #1d77ac;
-    height: 50%;
-    width: 30%;
-    background-color: #d5bd8ac8;
-}
-
-
-.nav_bar_color {
-    background-color: #d5bd8a;
-}
-
-.nav_bar_text {
-    color:#1d77ac;
-}
-
-#pokepage {
-    height: 100vh;
-    background-image: url('images/pokemonfind.jpg');
+    margin: 50px;
+    height: 80vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/game.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    background-attachment: local;
-    display:flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-#pokebutton {
-    background-color: red;
-    color:white;
-    text-decoration: none;
-    border:1px solid black;
-    cursor: pointer;
+    background-attachment:scroll;
+    border: solid #040f16 10px;
     border-radius: 20%;
 }
 
-.pokemonteam {
+.home-text {
+    background-color: #f7f4f3;
+}
+
+
+.create-background {
     height: 100vh;
-    background-image: url('images/Pokeball-Wallpaper-Full-HD.jpg');
+    background-image: url('images/court.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    background-attachment: local;
+    background-attachment: fixed;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
-.signin_pages{
-    height:100vh;
-    display:flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    background-image: url('images/Pokemon-Wallpapers-HD.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: local;
+    justify-content: center;
 }
 
-.trainercard {
-    background-color: black;
-    color:white;
-    border: 1px solid white;
-    margin: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+.create-background h1{
+    background-color:#f7f4f3;
     padding: 5px;
-    border-radius: 5%;
+    border-radius: 2px;
 }
 
-.trainers {
-    height:100vh;
-    background-image: url('images/Wallpaper\ Pokemon\ 36.jpg');
+.create-form {
+    margin: 25px;
+    background-color: #040f16;
+    border: 1px solid #f7f4f3;
+}
+
+.create-button {
+    width: 100%;
+    border: none;
+    background-color:#666a86;
+    color:#f7f4f3
+}
+.create-button:active{
+    width: 100%;
+    border: none;
+    color:#666a86;
+    background-color:#f7f4f3
+}
+
+.create-item{
+    margin: 5px;
+    border: 5px solid #fa8334;
+    background-color: #f7f4f3; 
+    border-radius: 2%;
+}
+
+.nav{
+    background-color: #fa8334;
+    outline: 1px solid #040f16;
+}
+
+.nav-link{
+    color: #040f16;
+}
+
+.nav-link:hover{
+    color: #666a86;
+}
+
+.join-background{
+    display:flex;
+    flex-direction: row;
+    height: 100vh;
+    background-image: url('images/court.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    background-attachment: local;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: baseline;
+    background-attachment: fixed;
+}
+
+.join-card {
+    margin: 5px;
+    height: fit-content;
+}
+
+.join-title {
+    background-color: #fa8334;
+    color:#f7f4f3;
+}
+
+.join-delete {
+    color: #666a86;
+    text-decoration:none;
+}
+
+.join-delete:hover{
+    color:#fa8334;
 }

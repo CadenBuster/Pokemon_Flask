@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Join Game
+{% endblock %}
+
+{% block content %}
+<div class="join-background">
+    {% if games %}
+        {% for game in games %}
+            <div class="card join-card" style="width: 18rem;">
+                <div class="card-header join-title">
+                    {% if current_user.id == game.user_id %} Your Game {%else%}
+                    {{game.host.first_name}}'s Game {%endif%}
+                    <div class="dropdown show" style="float:right">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Participants
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {% for participant in game.participants %}
+                          <a class="dropdown-item" href="#">{{participant.first_name}}</a>
+                        {%endfor%}
+                        </div>
+                      </div> 
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">{{game.indoor}}</li>
+                  <li class="list-group-item">{{game.score}}</li>
+                  <li class="list-group-item">{{game.amount}}</li>
+                  <li class="list-group-item"><a href="{{url_for('main.participate', game_id=game.id, user=current_user.id)}}" class="join-delete">
+                    {% if current_user in game.participants %}Leave{%else%}Join{%endif%}</a>
+                    {% if current_user.id == game.user_id %}
+                    <a class="join-delete" href="{{url_for('main.delete_game', game_id=game.id)}}" style="float:right">Delete</a>
+                    {%endif%}</li>  
+                </ul>
+                
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
