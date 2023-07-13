@@ -19,7 +19,6 @@ def login():
             login_user(queried_user)
             return redirect(url_for('main.home'))
         else:
-            flash('Invalid email or password', 'error')
             return render_template('login.html',form = form)
     else:
         return render_template('login.html',form = form)
@@ -32,17 +31,33 @@ def signup():
         user_data = {
             'first_name' : form.first_name.data,
             'last_name' : form.last_name.data,
+            'user_name': form.user_name.data,
             'email' : form.email.data.lower(),
             'password' : form.password.data
         }
 
-        new_user = User()
+        stat_data = {
+            'points' : 0,
+            'assists': 0,
+            'rebounds':0,
+            'games_played': 0
+        }
 
+        achievement_data = {
+            'triple_double': 'False',
+            'sus': 'False',
+            'snell': 'False'
+        }
+
+        new_user = User()
+        
+        
         new_user.from_dict(user_data)
+        new_user.from_stats(stat_data)
+        new_user.from_achieve(achievement_data)
 
         db.session.add(new_user)
         db.session.commit()
-        flash('Thank you for signing up!', 'success')
         return redirect(url_for('auth.login'))
     else:
         return render_template('signup.html', form = form)
@@ -51,5 +66,4 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    flash('Logged out!')
     return redirect(url_for('main.home'))

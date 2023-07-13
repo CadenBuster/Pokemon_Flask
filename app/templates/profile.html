@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{user.user_name}}'s Profile
+{% endblock %}
+
+{% block content %}
+<div class="profile-background">
+    <div class="profile-friends ">
+        <h4>Following</h4>
+        <div class="overflow-auto" style="height:100%;">
+            {%for follow in user.followed %}
+                <a class="join-delete" href="{{url_for('main.profile', user_id = follow.id)}}">{{follow.user_name}}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="profile-stats">
+        <div class="profile-formatting">
+            <div class="p-head">
+                <h4>{{user.user_name}}'s Stats</h4>
+                {%if user.id != current_user.id %}
+                <a class="btn edit-stats" href="{{url_for('main.follow', user_id=user.id)}}" style="margin-left:10px;">{%if user not in current_user.followed%}Follow{%else%}Unfollow{%endif%}</a>
+                {%endif%}
+            </div>
+            <div class="p-body">
+                
+                {%if user.games_played > 0%}
+                <table class="user-table">
+                    <tr>
+                        <th colspan="4">All Games</th>
+                    </tr>
+                    <tr>
+                        <th>Games Played</th>
+                        <th>Points Per Game</th>
+                        <th>Assists Per Game</th>
+                        <th>Rebounds Per Game</th>
+                    </tr>
+                    <tr>
+                        <td>{{user.games_played}}</td>
+                        <td>{{(user.points/user.games_played)|round(2)}}</td>
+                        <td>{{(user.assists/user.games_played)|round(2)}}</td>
+                        <td>{{(user.rebounds/user.games_played)|round(2)}}</td>
+                    </tr>
+                </table>
+                {%else%}
+                <p>{{user.user_name}} has not played any games yet</p>
+                {%endif%}
+            </div>
+        </div>
+        <div class="p-footer">
+            <p>Contact {{user.user_name}} at {{user.email}} for details on any of their hosted games.</p>
+        </div>
+    </div>
+    <div class="profile-achieve">
+        <h4 style="text-align:center">Achievements</h4>
+        {%if user.triple_double == 'True' %}
+            <strong><i class="fa-solid fa-basketball"></i>Triple Double</strong>
+            <p>Have double digit stats in three categories in one game</p>
+        {%endif%}
+        {%if user.sus == 'True'%}
+            <strong><i class="fa-regular fa-thumbs-down"></i>Sus</strong>
+            <p>Obtain stats that are too good to be true</p>
+        {%endif%}
+        {%if user.snell == 'True'%}
+            <strong><i class="fa-solid fa-person-walking-dashed-line-arrow-right"></i>Professional Runner</strong>
+            <p>Have a Tony Snell type game... zeros across the board</p>
+        {%endif%}
+
+    </div>
+</div>
+{% endblock%}

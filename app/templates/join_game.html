@@ -6,36 +6,150 @@
 
 {% block content %}
 <div class="join-background">
+  
     {% if games %}
-        {% for game in games %}
+    <div class="user-games">
+      <h1>Created Games</h1>
+      <div class="overflow-auto" style="height:100%;">
+        {% for game in current_user.games %}
             <div class="card join-card" style="width: 18rem;">
                 <div class="card-header join-title">
-                    {% if current_user.id == game.user_id %} Your Game {%else%}
-                    {{game.host.first_name}}'s Game {%endif%}
+                  {% if game.open == 'open' %}
+                    <a class="btn edit-stats" href="{{url_for('main.close_game', game_id=game.id)}}">Close Game</a>
+                  {% else %}
+                    <span><button type="button" class="btn edit-stats" data-bs-toggle="modal" data-bs-target="#{{game.id}}">
+                      Edit Stats
+                    </button></span>
+                    <div class="modal fade" id={{game.id}} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Game Statistics</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            
+                            {%for participant in game.participants%}
+                              {%if participant == game.participants[0]%}
+                              <form action="{{url_for('main.joingame', game_id = game.id, user_id = participant.id)}}" method="POST" class="stats-background">
+                                  {{participant.user_name}}
+                                  <br>
+                                    {{form.hidden_tag()}}
+                                    <div class="stats-form">
+                                      {{form.points.label}}
+                                      {{form.points(class="stat-input")}}
+                                    </div>
+                                    <br>
+                                    <div class="stats-form">
+                                      {{form.rebounds.label}}
+                                      {{form.rebounds(class="stat-input")}}
+                                    </div>
+                                    <br>
+                                    <div class="stats-form">
+                                      {{form.assists.label}}
+                                      {{form.assists(class="stat-input")}}
+                                    </div>
+                                    <br>
+                                    {{form.save_btn(class="btn edit-stats")}}
+                                  </form>
+                                {%endif%}
+                            {%endfor%}
+                          
+                          </div>
+                          
+                          <div class="modal-footer">
+                            <a class="join-delete" href="{{url_for('main.delete_game', game_id=game.id)}}">Delete Game when all stats are in</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  
+                  {%endif%}
+
                     <div class="dropdown show" style="float:right">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="btn btn-secondary dropdown-toggle participants" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Participants
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         {% for participant in game.participants %}
-                          <a class="dropdown-item" href="#">{{participant.first_name}}</a>
+                          <a class="dropdown-item" href="{{url_for('main.profile', user_id = participant.id)}}">{{participant.user_name}}</a>
                         {%endfor%}
                         </div>
                       </div> 
                 </div>
                 <ul class="list-group list-group-flush">
+                  <li class="list-group-item">{{game.city}}, {{game.state}}</li>
                   <li class="list-group-item">{{game.indoor}}</li>
                   <li class="list-group-item">{{game.score}}</li>
                   <li class="list-group-item">{{game.amount}}</li>
+                  {% if game.open == 'open'%}
                   <li class="list-group-item"><a href="{{url_for('main.participate', game_id=game.id, user=current_user.id)}}" class="join-delete">
                     {% if current_user in game.participants %}Leave{%else%}Join{%endif%}</a>
-                    {% if current_user.id == game.user_id %}
-                    <a class="join-delete" href="{{url_for('main.delete_game', game_id=game.id)}}" style="float:right">Delete</a>
-                    {%endif%}</li>  
+                    <a class="join-delete" href="{{url_for('main.delete_game', game_id=game.id)}}" style="float:right">Delete</a></li>
+                  {% endif %}
                 </ul>
                 
             </div>
+            
         {% endfor %}
+        </div>
+      </div>
+      {%endif%}
+      {%if games%}
+      <div class="join-formatting">
+      <div class="join-search">
+        <form action="{{url_for('main.joingame',game_id = 0, user_id = 0)}}" method="POST">
+          {{search.hidden_tag()}}
+          {{search.city.label}}
+          {{search.city}}
+          {{search.state.label}}
+          {{search.state}}
+          {{search.submit_btn(class="btn edit-stats")}}
+        </form>
+      </div>
+      <div class="other-games">
+          {% for game in games %}
+            {% if current_user.id != game.user_id%}
+            {% if location_list %}
+                {% for location in location_list %}
+                  {% if (location['Latitude']|round(1)) == (game.lat|round(1)) and (location['Longitude']|round(1)) == (game.long|round(1)) and location['City'] == game.city %}
+             
+                    <div class="card join-card" style="width: 18rem;">
+                        <div class="card-header join-title">
+                          <a class="join-title-text" href="{{url_for('main.profile', user_id = game.host.id)}}">
+                          {{game.host.user_name}}'s</a>
+                            <div class="dropdown show" style="float:right">
+                                <a class="btn btn-secondary dropdown-toggle participants" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Participants
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                {% for participant in game.participants %}
+                                  <a class="dropdown-item" href="#">{{participant.user_name}}</a>
+                                {%endfor%}
+                                </div>
+                              </div>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item">{{game.city}}, {{game.state}}</li>
+                          <li class="list-group-item">{{game.indoor}}</li>
+                          <li class="list-group-item">{{game.score}}</li>
+                          <li class="list-group-item">{{game.amount}}</li>
+                            <li class="list-group-item"><a href="{{url_for('main.participate', game_id=game.id, user=current_user.id)}}" class="join-delete">
+                              {% if current_user in game.participants %}Leave{%else%}Join{%endif%}</a>
+                        </ul>
+                    </div>
+                    {%endif%}
+                {% endfor %}
+              {% endif %}
+                  
+            {%endif%}
+          {%endfor%}
+        
+
+      </div>
+    </div>
+
+      
     {% endif %}
 </div>
 {% endblock %}

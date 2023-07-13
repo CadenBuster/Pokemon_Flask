@@ -10,6 +10,14 @@
     <form action="" method="POST" class="create-form">
         {{form.hidden_tag()}}
         <div class="create-item">
+            {{form.city.label}}
+            {{form.city(class="create-text")}}
+        </div>
+        <div class="create-item">
+            {{form.state.label}}
+            <span style="float:right">{{form.state(class="create-text")}}</span>
+        </div>
+        <div class="create-item">
             <p>Environment</p>
             {% for item in form.indoor%}
             <tr>

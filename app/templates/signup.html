@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block content %}
-<div>
+<div class="signin-background">
     <form action="" method="POST" class="my_forms">
         {{ form.hidden_tag() }}
         <div>
@@ -16,6 +16,11 @@
             {{ form.last_name.label }}
             <br>
             {{ form.last_name }}
+        </div>
+        <div>
+            {{ form.user_name.label }}
+            <br>
+            {{ form.user_name }}
         </div>
         <div>
             {{ form.email.label }}
